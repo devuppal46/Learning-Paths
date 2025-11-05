@@ -1,30 +1,55 @@
-# Animated hero section
+# Learning Paths 🚀
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+**by MindFlare**
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/mindflares-projects/v0-animated-hero-section)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/ib1DzpldAYv)
+A curated platform to explore structured learning journeys across different technologies and domains.
 
-## Overview
+---
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+## 🧠 Tech Stack
 
-## Deployment
+* **Next.js 16**
+* **TypeScript**
+* **Tailwind CSS**
 
-Your project is live at:
+---
 
-**[https://vercel.com/mindflares-projects/v0-animated-hero-section](https://vercel.com/mindflares-projects/v0-animated-hero-section)**
+## ⚙️ Installation
 
-## Build your app
+Clone the repository and install dependencies:
 
-Continue building your app on:
+```bash
+git clone https://github.com/sehajmakkar/LearningPaths.git
+cd LearningPaths
+npm install --force
+npm run dev
+```
 
-**[https://v0.app/chat/ib1DzpldAYv](https://v0.app/chat/ib1DzpldAYv)**
+Your app will be running at **[http://localhost:3000](http://localhost:3000)**
 
-## How It Works
+---
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+## 🤝 Contribute
+
+We welcome contributions from everyone!
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature-name`)
+3. Commit your changes (`git commit -m "Added new feature"`)
+4. Push to your branch (`git push origin feature-name`)
+5. Open a Pull Request
+
+---
+
+### 💻 Technical Team
+* **Dev Uppal** — Technical Head
+* **Sarthak** — Technical Head
+
+### 🧑‍💼 President
+**Sehaj Preet**
+
+---
+
+## 📄 License
+
+This project is open-source and maintained by **MindFlare**.
