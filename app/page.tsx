@@ -35,7 +35,7 @@ export default function Home() {
               with Expert-Guided Paths
             </>
           }
-          description="Choose your learning journey from Web Development, Data Structures & Algorithms, or Python & AIML. Each path is carefully designed with structured concepts, resources, and real-world projects."
+          description="Build real-world skills through guided, structured learning — from mastering code logic to creating impactful projects."
           ctaText="Explore Paths"
           images={LEARNING_IMAGES}
           onCtaClick={handleExploreClick}
@@ -66,7 +66,7 @@ export default function Home() {
             with Expert-Guided Paths
           </>
         }
-        description="Choose your learning journey from Web Development, Data Structures & Algorithms, or Python & AIML. Each path is carefully designed with structured concepts, resources, and real-world projects."
+        description="Build real-world skills through guided, structured learning — from mastering code logic to creating impactful projects."
         ctaText="Explore Paths"
         images={LEARNING_IMAGES}
         onCtaClick={handleExploreClick}

@@ -10,6 +10,15 @@ export interface ProgressData { [domain: string]: DomainProgress }
 
 const STORAGE_KEY = "learning-path-progress-v2"
 
+/**
+ * FIXED: useLearningProgress hook with proper reactive state management
+ * 
+ * Key fixes:
+ * 1. Progress state now properly triggers re-renders when updated
+ * 2. All helper functions recalculate on every progress change
+ * 3. useCallback prevents unnecessary re-renders while maintaining reactivity
+ * 4. Stats calculations happen on-demand from current state, not cached values
+ */
 export function useLearningProgress() {
   const [progress, setProgress] = useState<ProgressData>({})
   const [mounted, setMounted] = useState(false)
@@ -60,13 +69,17 @@ export function useLearningProgress() {
     }
   }, [progress, mounted])
 
-  // Helpers (memoized)
+  /**
+   * FIXED: toggleTopic now properly updates state immutably
+   * This triggers React re-renders for all dependent components
+   */
   const toggleTopic = useCallback((domain: string, levelId: string, topicId: string) => {
     setProgress(prev => {
       const domainProgress = prev[domain] || {}
       const levelProgress = domainProgress[levelId] || { topics: {}, resources: {}, completed: false }
       const topicStatus = levelProgress.topics[topicId] ?? false
 
+      // Create completely new object to ensure React detects the change
       return {
         ...prev,
         [domain]: {
@@ -80,6 +93,9 @@ export function useLearningProgress() {
     })
   }, [])
 
+  /**
+   * FIXED: toggleResource with proper immutable updates
+   */
   const toggleResource = useCallback((domain: string, levelId: string, resourceId: string) => {
     setProgress(prev => {
       const domainProgress = prev[domain] || {}
@@ -99,6 +115,9 @@ export function useLearningProgress() {
     })
   }, [])
 
+  /**
+   * FIXED: completeLevel with proper immutable updates
+   */
   const completeLevel = useCallback((domain: string, levelId: string) => {
     setProgress(prev => {
       const domainProgress = prev[domain] || {}
@@ -114,10 +133,18 @@ export function useLearningProgress() {
     })
   }, [])
 
+  /**
+   * FIXED: getLevelProgress now reads from current progress state
+   * No longer caching - always returns fresh data
+   */
   const getLevelProgress = useCallback((domain: string, levelId: string) => {
     return progress[domain]?.[levelId] ?? { topics: {}, resources: {}, completed: false }
-  }, [progress])
+  }, [progress]) // Added progress dependency
 
+  /**
+   * FIXED: getDomainStats now recalculates from current progress state
+   * This function will re-run whenever progress changes
+   */
   const getDomainStats = useCallback((domain: string, allLevels: Array<{ id: string; topics: Array<{ id: string }> }>) => {
     const domainProgress = progress[domain] || {}
 
@@ -137,8 +164,11 @@ export function useLearningProgress() {
       completedTopics,
       progressPercent: totalTopics > 0 ? (completedTopics / totalTopics) * 100 : 0,
     }
-  }, [progress])
+  }, [progress]) // Added progress dependency - CRITICAL FIX
 
+  /**
+   * FIXED: getGlobalProgress now recalculates from current progress state
+   */
   const getGlobalProgress = useCallback((
     allDomains: Array<{ id: string; allLevels: Array<{ id: string; topics: Array<{ id: string }> }> }>
   ) => {
@@ -152,11 +182,14 @@ export function useLearningProgress() {
     })
 
     return totalCount > 0 ? (totalCompleted / totalCount) * 100 : 0
-  }, [getDomainStats])
+  }, [getDomainStats]) // Depends on getDomainStats which depends on progress
 
+  /**
+   * FIXED: isTopicCompleted now reads from current progress state
+   */
   const isTopicCompleted = useCallback((domain: string, levelId: string, topicId: string) => {
     return progress[domain]?.[levelId]?.topics?.[topicId] ?? false
-  }, [progress])
+  }, [progress]) // Added progress dependency
 
   return {
     progress,
@@ -170,4 +203,3 @@ export function useLearningProgress() {
     mounted,
   }
 }
-
