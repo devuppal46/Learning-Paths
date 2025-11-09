@@ -6,6 +6,7 @@ import { Code, Database, Brain } from "lucide-react"
 import { useLearningProgress } from "@/hooks/use-learning-progress"
 import { ProgressBar } from "@/components/progress-bar"
 import { learningPaths } from "@/lib/learning-data"
+import { useMemo } from "react"
 
 const LEARNING_PATHS = [
   {
@@ -37,8 +38,16 @@ const LEARNING_PATHS = [
   },
 ]
 
+/**
+ * FIXED: LearningPathsGrid with reactive progress updates
+ * 
+ * Key changes:
+ * 1. Added updateTrigger to dependencies
+ * 2. Wrapped stats calculations in useMemo
+ * 3. Stats now update whenever progress changes
+ */
 export function LearningPathsGrid() {
-  const { getDomainStats, mounted } = useLearningProgress()
+  const { getDomainStats, mounted, updateTrigger } = useLearningProgress()
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -55,6 +64,25 @@ export function LearningPathsGrid() {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } },
   }
+
+  // CRITICAL FIX: Recalculate all path stats when updateTrigger changes
+  const pathStats = useMemo(() => {
+    if (!mounted) {
+      return LEARNING_PATHS.map(path => ({
+        ...path,
+        stats: { progressPercent: 0, completedTopics: 0, totalTopics: 0 }
+      }))
+    }
+
+    return LEARNING_PATHS.map(path => {
+      const pathData = learningPaths[path.domain]
+      const stats = pathData 
+        ? getDomainStats(path.domain, pathData.levels)
+        : { progressPercent: 0, completedTopics: 0, totalTopics: 0 }
+      
+      return { ...path, stats }
+    })
+  }, [mounted, getDomainStats, updateTrigger])
 
   return (
     <section className="py-20 px-4 bg-background">
@@ -78,13 +106,8 @@ export function LearningPathsGrid() {
           whileInView="show"
           className="grid grid-cols-1 md:grid-cols-3 gap-8"
         >
-          {LEARNING_PATHS.map((path) => {
+          {pathStats.map((path, index) => {
             const IconComponent = path.icon
-            const pathData = learningPaths[path.domain]
-            const stats =
-              mounted && pathData
-                ? getDomainStats(path.domain, pathData.levels)
-                : { progressPercent: 0, completedTopics: 0, totalTopics: 0 }
 
             return (
               <motion.div key={path.id} variants={itemVariants}>
@@ -100,8 +123,8 @@ export function LearningPathsGrid() {
                       <p className="text-muted-foreground mb-6 flex-grow">{path.description}</p>
                       <div className="mb-4">
                         <ProgressBar
-                          progress={stats.progressPercent}
-                          label={`${stats.completedTopics}/${stats.totalTopics} topics`}
+                          progress={path.stats.progressPercent}
+                          label={`${path.stats.completedTopics}/${path.stats.totalTopics} topics`}
                           showPercentage={true}
                           size="sm"
                         />
