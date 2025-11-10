@@ -51,7 +51,7 @@ export default function Home() {
               with Expert-Guided Paths
             </>
           }
-          description="Build real-world skills through guided, structured learning — from mastering code logic to creating impactful projects."
+          description="Fostering a vibrant coding culture and empowering innovation at MAIT — powered by MindFlare."
           ctaText="Explore Paths"
           onCtaClick={handleExploreClick}
         />
@@ -73,7 +73,7 @@ export default function Home() {
             with Expert-Guided Paths
           </>
         }
-        description="Build real-world skills through guided, structured learning — from mastering code logic to creating impactful projects."
+        description="Fostering a vibrant coding culture and empowering innovation at MAIT — powered by MindFlare."
         ctaText="Explore Paths"
         onCtaClick={handleExploreClick}
       />
